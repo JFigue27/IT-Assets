@@ -21,6 +21,7 @@ namespace MyApp.Database
         public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<AdvancedSort> AdvancedSorts { get; set; }
+        public virtual DbSet<Asset> Assets { get; set; }
         public virtual DbSet<FilterData> FilterDatas { get; set; }
         public virtual DbSet<SortData> SortDatas { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
@@ -37,7 +38,7 @@ namespace MyApp.Database
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Ignore<Contact>();
 
-            
+            ///start:slot:model<<<///end:slot:model<<<
         }
     }
 }

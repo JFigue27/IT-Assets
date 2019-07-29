@@ -1,0 +1,14 @@
+name: Asset
+type: entity
+fields:
+  CPU-Name: string
+  Model: string
+  Serial Number: string
+  Ram: string
+  CPU: string
+  Location: string
+  Usuario: String
+relationships:
+  oneToParent: []
+  oneToMany: []
+  manyToOne: []

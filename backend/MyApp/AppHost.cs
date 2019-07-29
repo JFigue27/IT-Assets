@@ -155,6 +155,7 @@ namespace MyApp
             container.RegisterAutoWired<EmailLogic>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<UserLogic>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<AdvancedSortLogic>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWired<AssetLogic>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<FilterDataLogic>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<SortDataLogic>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWired<TokenLogic>().ReusedWithin(ReuseScope.Request);
