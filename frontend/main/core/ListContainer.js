@@ -31,7 +31,11 @@ class ListContainer extends FormContainer {
     sortName: 'mySort',
     autoAdd: false,
     baseList: [],
-    isLoading: true
+    isLoading: true,
+    isAllSelected: false,
+    isAllUnselected: true,
+    filterOptions: {},
+    sortOptions: {}
   };
 
   constructor(props, config) {
@@ -39,13 +43,27 @@ class ListContainer extends FormContainer {
     if (config) Object.assign(this.state, config);
     this.service = this.state.service;
 
-    this.debouncedRefresh = debounce(this.refresh, 300);
+    this.debouncedRefresh = debounce(this.refresh, 250);
     AuthService.ON_LOGIN = this.refresh;
   }
 
   bindFilterInput = event => {
-    this.filterOptions[event.target.name] = event.target.value;
+    const { filterOptions } = this.state;
+    filterOptions[event.target.name] = event.target.value;
+    this.setState({ filterOptions });
+    this.persistFilter(filterOptions);
     this.debouncedRefresh();
+  };
+
+  bindFilterInputNoRefresh = event => {
+    const { filterOptions } = this.state;
+    filterOptions[event.target.name] = event.target.value;
+    this.persistFilter(filterOptions);
+    this.setState({ filterOptions });
+  };
+
+  generalSearchOnEnter = event => {
+    if (event.charCode == 13) this.refresh();
   };
 
   componentWillMount() {
@@ -59,25 +77,27 @@ class ListContainer extends FormContainer {
 
   // Filtering / Sorting and Local Storage:=======================================
   clearFilters = () => {
-    this.filterOptions = this.filterOptions || {};
-    this.filterOptions.limit = this.state.limit;
-    this.filterOptions.page = 1;
-    this.filterOptions.itemsCount = 0;
+    const { filterOptions } = this.state;
+    filterOptions.limit = this.state.limit;
+    filterOptions.page = 1;
+    filterOptions.itemsCount = 0;
 
-    this.persistFilter(this.filterOptions);
+    this.setState({ filterOptions });
+    this.persistFilter(filterOptions);
   };
 
   clearSorts = () => {
-    this.sortOptions = {};
-    // this.setState({ sortOptions });
-    this.persistSort(this.sortOptions);
+    const { sortOptions } = this.state;
+
+    this.setState({ sortOptions });
+    this.persistSort(sortOptions);
   };
 
-  persistFilter = (filters = this.filterOptions) => {
+  persistFilter = (filters = this.state.filterOptions) => {
     if (process.browser) localStorage.setItem(storageSufixx + '.f.' + this.state.filterName, JSON.stringify(filters));
   };
 
-  persistSort = (sorts = this.sortOptions) => {
+  persistSort = (sorts = this.state.sortOptions) => {
     if (process.browser) localStorage.setItem(storageSufixx + '.s.' + this.state.sortName, JSON.stringify(sorts));
   };
 
@@ -88,7 +108,8 @@ class ListContainer extends FormContainer {
     if (!filterOptions) {
       this.clearFilters();
     } else {
-      this.filterOptions = JSON.parse(filterOptions);
+      filterOptions = JSON.parse(filterOptions);
+      this.setState({ filterOptions });
     }
   };
 
@@ -99,7 +120,8 @@ class ListContainer extends FormContainer {
     if (!sortOptions) {
       this.clearSorts();
     } else {
-      this.sortOptions = JSON.parse(sortOptions);
+      sortOptions = JSON.parse(sortOptions);
+      this.setState({ sortOptions });
     }
   };
 
@@ -107,15 +129,15 @@ class ListContainer extends FormContainer {
   load = async staticQueryParams => {
     this.staticQueryParams = staticQueryParams;
     // alertify.closeAll();
-    this.initFilterOptions();
-    this.initSortOptions();
+    // this.initFilterOptions();
+    // this.initSortOptions();
     return await this.updateList();
   };
 
   updateList = async () => {
     this.setState({ isLoading: true });
 
-    let filterOptions = { ...this.filterOptions };
+    let { filterOptions } = this.state;
 
     if (!this.state.paginate) {
       filterOptions.limit = 0;
@@ -137,12 +159,10 @@ class ListContainer extends FormContainer {
       .then(response => {
         let baseList = response.Result;
 
-        if (this.state.autoAdd) baseList.push({});
-
         filterOptions.itemsCount = response.AdditionalData.total_filtered_items;
         filterOptions.totalItems = response.AdditionalData.total_items;
+        filterOptions.page = response.AdditionalData.page || page;
 
-        this.filterOptions = filterOptions;
         this.persistFilter(filterOptions);
         this.persistSort();
 
@@ -156,9 +176,12 @@ class ListContainer extends FormContainer {
 
         this.ON_CHANGE(baseList);
 
+        if (this.state.autoAdd) baseList.push({});
+
         this.setState({
           baseList,
-          isLoading: false
+          isLoading: false,
+          filterOptions
         });
       })
       .catch(e => {
@@ -168,7 +191,7 @@ class ListContainer extends FormContainer {
       });
   };
 
-  makeQueryParameters = (filterOptions = this.filterOptions, sortOptions = this.sortOptions) => {
+  makeQueryParameters = (filterOptions = this.state.filterOptions, sortOptions = this.state.sortOptions) => {
     let result = '?';
     Object.getOwnPropertyNames(filterOptions).forEach(prop => {
       result += prop + '=' + filterOptions[prop] + '&';
@@ -190,7 +213,7 @@ class ListContainer extends FormContainer {
   };
 
   refresh = () => {
-    if (!this.filterOptions || this.filterOptions.limit == undefined) {
+    if (this.state.filterOptions.limit == undefined) {
       this.clearFilters();
     } else {
       this.updateList();
@@ -222,6 +245,12 @@ class ListContainer extends FormContainer {
     }
   };
 
+  localRemoveItem = (event, index, arrRows = this.state.baseList) => {
+    if (event) event.stopPropagation();
+    arrRows.splice(index, 1);
+    this.onInputChange();
+  };
+
   removeSelected = () => {
     throw 'Not Implemented';
   };
@@ -247,15 +276,28 @@ class ListContainer extends FormContainer {
   };
 
   selectAll = () => {
-    throw 'Not Implemented';
+    const { baseList } = this.state;
+    for (let item of baseList) {
+      item.selected = true;
+    }
+    this.setState({ baseList, isAllSelected: true, isAllUnselected: false });
+    this.ON_CHANGE(baseList);
   };
 
-  unSelectAll = () => {
-    throw 'Not Implemented';
+  unselectAll = () => {
+    const { baseList } = this.state;
+    for (let item of baseList) {
+      item.selected = false;
+    }
+    this.setState({ baseList, isAllSelected: false, isAllUnselected: true });
+    this.ON_CHANGE(baseList);
   };
 
-  checkItem = () => {
-    throw 'Not Implemented';
+  toggleSelect = index => {
+    const { baseList } = this.state;
+    baseList[index].selected = !baseList[index].selected;
+    this.setState({ baseList, isAllSelected: false, isAllUnselected: false });
+    this.ON_CHANGE(baseList);
   };
 
   getSelected = () => {
@@ -281,20 +323,10 @@ class ListContainer extends FormContainer {
   };
 
   pageChanged = (newPage, limit) => {
-    this.filterOptions.page = newPage;
-    // this.setState({
-    //   filterOptions: {
-    //     page: newPage
-    //   }
-    // });
-    if (limit > 0) {
-      this.filterOptions.limit = limit;
-      // this.setState({
-      //   filterOptions: {
-      //     limit: limit
-      //   }
-      // });
-    }
+    const { filterOptions } = this.state;
+    filterOptions.page = newPage;
+    if (limit > 0) filterOptions.limit = limit;
+    this.setState({ filterOptions });
     this.updateList();
   };
 
@@ -312,6 +344,18 @@ class ListContainer extends FormContainer {
 
   handleAutocompleteChange = (value, field, currentIndex, arrRows = this.state.baseList) => {
     arrRows[currentIndex][field] = value.label;
+    arrRows[currentIndex].Entry_State = 1;
+    this.onInputChange();
+  };
+
+  handleCheckBoxChange = (event, field, currentIndex, arrRows = this.state.baseList) => {
+    arrRows[currentIndex][field] = event.target.checked;
+    arrRows[currentIndex].Entry_State = 1;
+    this.onInputChange();
+  };
+
+  handleToggleListItem = (field, currentIndex, arrRows = this.state.baseList) => {
+    arrRows[currentIndex][field] = !arrRows[currentIndex][field];
     arrRows[currentIndex].Entry_State = 1;
     this.onInputChange();
   };
@@ -360,7 +404,7 @@ class ListContainer extends FormContainer {
         // adjacent input or textarea. once in a textarea,
         // however, it will not attempt to break out because
         // that just seems too messy imho.
-        this.find('input').keydown(function(e) {
+        this.find('input,textarea,button').keydown(function(e) {
           // shortcut for key other than arrow keys
           if ($.inArray(e.which, [arrow.left, arrow.up, arrow.right, arrow.down, arrow.enter]) < 0) {
             return;
@@ -375,13 +419,13 @@ class ListContainer extends FormContainer {
           switch (e.which) {
             case arrow.left: {
               // if (input.selectionStart == 0) {
-              moveTo = td.prev('td:has(input,textarea)');
+              moveTo = td.prev('td:has(input,textarea,button)');
               // }
               break;
             }
             case arrow.right: {
               // if (input.selectionEnd == input.value.length) {
-              moveTo = td.next('td:has(input,textarea)');
+              moveTo = td.next('td:has(input,textarea,button)');
               // }
               break;
             }
@@ -407,9 +451,11 @@ class ListContainer extends FormContainer {
           }
 
           if (moveTo && moveTo.length) {
-            moveTo.find('input,textarea').each(function(i, input) {
+            moveTo.find('input,textarea,button').each(function(i, input) {
               input.focus();
-              input.select();
+              if (input.type != 'button') {
+                input.select();
+              }
             });
           }
         });

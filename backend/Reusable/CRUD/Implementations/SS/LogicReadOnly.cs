@@ -30,6 +30,7 @@ namespace Reusable.CRUD.Implementations.SS
         virtual protected SqlExpression<Entity> OnGetList(SqlExpression<Entity> query) { return query; }
         virtual protected SqlExpression<Entity> OnGetSingle(SqlExpression<Entity> query) { return OnGetList(query); }
         virtual protected IEnumerable<Entity> AdapterOut(params Entity[] entities) { return entities.ToList(); }
+        virtual protected List<Entity> BeforePaginate(List<Entity> entities) { return entities; }
         virtual protected bool PopulateForSearch(params Entity[] entities) { return false; } // return true to avoid calling AdapterOut when getPage because they are the same.
         #endregion
 
@@ -40,7 +41,7 @@ namespace Reusable.CRUD.Implementations.SS
                 return cache;
 
             var query = OnGetList(Db.From<Entity>());
-            var entities = AdapterOut(Db.LoadSelect(query).ToArray());
+            var entities = AdapterOut(BeforePaginate(Db.LoadSelect(query)).ToArray());
 
             var response = entities.ToList();
             Cache.Set(CACHE_GET_ALL, response);
@@ -54,7 +55,7 @@ namespace Reusable.CRUD.Implementations.SS
                 return cache;
 
             var query = OnGetList(Db.From<Entity>());
-            var entities = AdapterOut((await Db.LoadSelectAsync(query)).ToArray());
+            var entities = AdapterOut(BeforePaginate(await Db.LoadSelectAsync(query)).ToArray());
 
             var response = entities.ToList();
             Cache.Set(CACHE_GET_ALL, response);
@@ -138,35 +139,18 @@ namespace Reusable.CRUD.Implementations.SS
                     //  use their underlying property to set the value in the object
                     if (tProp.IsGenericType
                         && tProp.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-                    {
                         //Get the underlying type property instead of the nullable generic
                         tProp = new NullableConverter(oProp.PropertyType).UnderlyingType;
-                    }
 
                     ParameterExpression entityParameter = Expression.Parameter(typeof(Entity), "entityParameter");
                     Expression childProperty = Expression.PropertyOrField(entityParameter, sPropertyName);
 
-
                     var value = Expression.Constant(Convert.ChangeType(queryParamValue, tProp));
 
-                    // let's perform the conversion only if we really need it
-                    var converted = value.Type != childProperty.Type
-                        ? Expression.Convert(value, childProperty.Type)
-                        : (Expression)value;
-
-                    Expression<Func<Entity, bool>> lambda;
-                    if (tProp == typeof(String))
-                    {
-                        MethodInfo method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-                        lambda = Expression.Lambda<Func<Entity, bool>>(Expression.Call(converted, method, childProperty), entityParameter);
-                    }
+                    if (tProp == typeof(string))
+                        query.Where($"{query.SqlColumn(sPropertyName)} like '%{value.Value}%'");
                     else
-                    {
-                        Expression comparison = Expression.Equal(childProperty, converted);
-                        lambda = Expression.Lambda<Func<Entity, bool>>(comparison, entityParameter);
-                    }
-
-                    query.And(lambda);
+                        query.Where($"{query.SqlColumn(sPropertyName)} = {value.Value}");
                 }
             }
             #endregion
@@ -221,9 +205,7 @@ namespace Reusable.CRUD.Implementations.SS
                         }
                     }
                     if (bAllKeywordsFound)
-                    {
                         filteredResultSet.Add(e);
-                    }
                 }
 
                 //DID NOT WORK SOMETIMES:
@@ -233,9 +215,7 @@ namespace Reusable.CRUD.Implementations.SS
                 //                                        .Contains(keyword))));
             }
             else
-            {
                 filteredResultSet = new HashSet<Entity>(entities);
-            }
 
             filterResponse.total_filtered_items = filteredResultSet.Count();
             #endregion
@@ -244,19 +224,20 @@ namespace Reusable.CRUD.Implementations.SS
             IEnumerable<Entity> afterPaginate;
             if (perPage != 0)
             {
-                afterPaginate = filteredResultSet.Skip((page - 1) * perPage).Take(perPage);
+                var totalPagesCount = (filterResponse.total_filtered_items + perPage - 1) / perPage;
+                if (page > totalPagesCount)
+                    page = totalPagesCount;
+
+                afterPaginate = BeforePaginate(filteredResultSet.ToList()).Skip((page - 1) * perPage).Take(perPage);
+                filterResponse.page = page;
             }
             else
-            {
-                afterPaginate = filteredResultSet;
-            }
+                afterPaginate = BeforePaginate(filteredResultSet.ToList());
             #endregion
 
             #region AdapterOut Hook
             if (!PopulateForSearchEqualsAdapterOut)
-            {
                 AdapterOut(afterPaginate.ToArray());
-            }
             #endregion
 
             var response = new CommonResponse { Result = afterPaginate, AdditionalData = filterResponse };
@@ -304,35 +285,18 @@ namespace Reusable.CRUD.Implementations.SS
                     //  use their underlying property to set the value in the object
                     if (tProp.IsGenericType
                         && tProp.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-                    {
                         //Get the underlying type property instead of the nullable generic
                         tProp = new NullableConverter(oProp.PropertyType).UnderlyingType;
-                    }
 
                     ParameterExpression entityParameter = Expression.Parameter(typeof(Entity), "entityParameter");
                     Expression childProperty = Expression.PropertyOrField(entityParameter, sPropertyName);
 
-
                     var value = Expression.Constant(Convert.ChangeType(queryParamValue, tProp));
 
-                    // let's perform the conversion only if we really need it
-                    var converted = value.Type != childProperty.Type
-                        ? Expression.Convert(value, childProperty.Type)
-                        : (Expression)value;
-
-                    Expression<Func<Entity, bool>> lambda;
-                    if (tProp == typeof(String))
-                    {
-                        MethodInfo method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-                        lambda = Expression.Lambda<Func<Entity, bool>>(Expression.Call(converted, method, childProperty), entityParameter);
-                    }
+                    if (tProp == typeof(string))
+                        query.Where($"{query.SqlColumn(sPropertyName)} like '%{value.Value}%'");
                     else
-                    {
-                        Expression comparison = Expression.Equal(childProperty, converted);
-                        lambda = Expression.Lambda<Func<Entity, bool>>(comparison, entityParameter);
-                    }
-
-                    query.And(lambda);
+                        query.Where($"{query.SqlColumn(sPropertyName)} = {value.Value}");
                 }
             }
 
@@ -389,9 +353,7 @@ namespace Reusable.CRUD.Implementations.SS
                         }
                     }
                     if (bAllKeywordsFound)
-                    {
                         filteredResultSet.Add(e);
-                    }
                 }
 
                 //DID NOT WORK SOMETIMES:
@@ -401,9 +363,7 @@ namespace Reusable.CRUD.Implementations.SS
                 //                                        .Contains(keyword))));
             }
             else
-            {
                 filteredResultSet = new HashSet<Entity>(entities);
-            }
 
             filterResponse.total_filtered_items = filteredResultSet.Count();
             #endregion
@@ -411,20 +371,14 @@ namespace Reusable.CRUD.Implementations.SS
             #region Pagination
             IEnumerable<Entity> afterPaginate;
             if (perPage != 0)
-            {
-                afterPaginate = filteredResultSet.Skip((page - 1) * perPage).Take(perPage);
-            }
+                afterPaginate = BeforePaginate(filteredResultSet.ToList()).Skip((page - 1) * perPage).Take(perPage);
             else
-            {
-                afterPaginate = filteredResultSet;
-            }
+                afterPaginate = BeforePaginate(filteredResultSet.ToList());
             #endregion
 
             #region AdapterOut Hook
             if (!PopulateForSearchEqualsAdapterOut)
-            {
                 AdapterOut(afterPaginate.ToArray());
-            }
             #endregion
 
             var response = new CommonResponse { Result = afterPaginate.ToList(), AdditionalData = filterResponse };

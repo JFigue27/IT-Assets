@@ -25,6 +25,20 @@ namespace Reusable.CRUD.Implementations.SS
             Request = request;
         }
 
+        public bool HasRoles(params string[] roles)
+        {
+            if (Auth != null && Auth.Roles != null)
+            {
+                foreach (var role in roles)
+                    if (!Auth.Roles.Contains(role))
+                        return false;
+            }
+            else
+                return false;
+
+            return true;
+        }
+
         static public object TryCatch(Action operation)
         {
             try
@@ -43,6 +57,7 @@ namespace Reusable.CRUD.Implementations.SS
             public List<List<BaseEntity>> Dropdowns { get; set; }
             public int total_items { get; set; }
             public int total_filtered_items { get; set; }
+            public int page { get; set; }
         }
 
         protected bool IsValidJSValue(string value)

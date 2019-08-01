@@ -84,7 +84,7 @@ class FormContainer extends React.Component {
       this.setState({
         baseEntity: instance
       });
-      this.ON_CHANGE(baseEntity);
+      this.ON_CHANGE(instance);
     });
   };
 
@@ -216,42 +216,42 @@ class FormContainer extends React.Component {
     let baseEntity = this.state.baseEntity;
     baseEntity[field] = event.target.value;
     this.setState({ baseEntity });
-    this.ON_CHANGE(baseEntity);
+    this.ON_CHANGE(baseEntity, field);
   };
 
   handleCheckBoxChange = (event, field) => {
     let baseEntity = this.state.baseEntity;
     baseEntity[field] = event.target.checked;
     this.setState({ baseEntity });
-    this.ON_CHANGE(baseEntity);
+    this.ON_CHANGE(baseEntity, field);
   };
 
   handleDateChange = (date, field) => {
     let baseEntity = this.state.baseEntity;
     baseEntity[field] = date.toDate();
     this.setState({ baseEntity });
-    this.ON_CHANGE(baseEntity);
+    this.ON_CHANGE(baseEntity, field);
   };
 
   handleRichText = (event, field) => {
     let baseEntity = this.state.baseEntity;
     baseEntity[field] = event.value;
     this.setState({ baseEntity });
-    this.ON_CHANGE(baseEntity);
+    this.ON_CHANGE(baseEntity, field);
   };
 
   handleChipsChange = (value, field) => {
     let baseEntity = this.state.baseEntity;
     baseEntity[field] = value;
     this.setState({ baseEntity });
-    this.ON_CHANGE(baseEntity);
+    this.ON_CHANGE(baseEntity, field);
   };
 
   handleAutocompleteChange = (value, field) => {
     let baseEntity = this.state.baseEntity;
     baseEntity[field] = value ? value.label : null;
     this.setState({ baseEntity });
-    this.ON_CHANGE(baseEntity);
+    this.ON_CHANGE(baseEntity, field);
   };
 
   getCurrentUser = () => {
@@ -340,7 +340,9 @@ class FormContainer extends React.Component {
 
   BEFORE_CHECKIN = () => {};
 
-  ON_CHANGE = entity => {};
+  ON_CHANGE = (data, field) => {
+    this.props.onChange && this.props.onChange(data, field);
+  };
 
   render() {
     return <></>;

@@ -10,6 +10,7 @@ import '../../styles.scss';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import { SnackbarProvider } from 'notistack';
+import { GlobalContext } from './globals-context';
 
 class App extends React.Component {
   pages = [
@@ -26,7 +27,8 @@ class App extends React.Component {
     anchorEl: null,
     currentTab: 0,
     loginOpen: false,
-    loading: true
+    loading: true,
+    globals: {}
   };
 
   classes = {
@@ -55,23 +57,20 @@ class App extends React.Component {
     this.setState({
       loading: false,
       auth: AuthService.auth,
-      currentTab: findRoute
+      currentTab: findRoute,
+      globals: { auth: AuthService.auth }
     });
-    //  else {
-    //   AuthService.auth.user = await userService.GetByUserName(AuthService.auth.user.UserName);
-    //   localStorage.setItem('authData', JSON.stringify(AuthService.auth));
-    // }
   }
   openLoginDialog = () => {
     this.setState({ loginOpen: true });
   };
   closeLoginDialog = () => {
-    this.setState({ loginOpen: false, auth: AuthService.auth });
+    this.setState({ loginOpen: false, auth: AuthService.auth, globals: { auth: AuthService.auth } });
   };
 
   logout = () => {
     AuthService.logout().then(() => {
-      this.setState({ auth: AuthService.auth });
+      this.setState({ auth: AuthService.auth, globals: { auth: AuthService.auth } });
     });
     this.openLoginDialog();
   };
@@ -137,7 +136,7 @@ class App extends React.Component {
           {() => <Login onCloseLogin={this.closeLoginDialog} />}
         </Dialog>
         {!fullscreen && (
-          <AppBar position='fixed' className='MainAppBar'>
+          <AppBar position='fixed' className='MainAppBar app-nav'>
             <Toolbar>
               {/* <IconButton color='inherit' onClick={this.toggleDrawer('right', true)}>
               <Icon>menu</Icon>
@@ -170,7 +169,7 @@ class App extends React.Component {
                 open={open}
                 onClose={this.handleClose}
               >
-                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                {/* <MenuItem onClick={this.handleClose}>Profile</MenuItem> */}
                 <MenuItem onClick={this.logout}>Logout</MenuItem>
               </Menu>
             </Toolbar>
@@ -183,9 +182,11 @@ class App extends React.Component {
         </Drawer>
         <SnackbarProvider autoHideDuration={1500}>
           <MuiPickersUtilsProvider utils={MomentUtils}>
-            <Grid container direction='column' item xs={12} style={{ padding: fullscreen ? 10 : 40 }}>
-              {this.props.children}
-            </Grid>
+            <GlobalContext.Provider value={this.state.globals}>
+              <Grid container direction='column' item xs={12} style={{ padding: 10 }}>
+                {this.props.children}
+              </Grid>
+            </GlobalContext.Provider>
           </MuiPickersUtilsProvider>
         </SnackbarProvider>
       </div>

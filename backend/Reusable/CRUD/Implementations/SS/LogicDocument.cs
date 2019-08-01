@@ -426,7 +426,7 @@ namespace Reusable.CRUD.Implementations.SS
 
             if (!string.IsNullOrWhiteSpace(document.CheckedoutBy)
                 && Auth.UserName != document.CheckedoutBy
-                && !Auth.Roles.Contains("Admin"))
+                && !HasRoles("Admin"))
                 throw new KnownError($"Only User who Checked Out can \"Cancel Checked Out\": {document.CheckedoutBy}");
 
             document.CheckedoutBy = null;
@@ -442,7 +442,7 @@ namespace Reusable.CRUD.Implementations.SS
             var document = await GetByIdAsync(id);
 
             if (!string.IsNullOrWhiteSpace(document.CheckedoutBy) && Auth.UserName != document.CheckedoutBy
-                && !Auth.Roles.Contains("Admin"))
+                && !HasRoles("Admin"))
                 throw new KnownError($"Only User who Checked Out can \"Cancel Checked Out\": {document.CheckedoutBy}");
 
             document.CheckedoutBy = null;

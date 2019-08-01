@@ -85,7 +85,7 @@ export class CRUDFactory {
     }
   }
 
-  async LoadEntities(params) {
+  async LoadEntities(params = '?') {
     return await Request('GET', this.EndPoint + params + '&noCache=' + Number(new Date()))
       .then(r => this.UseNudeResponse(r))
       .catch(this.GeneralError);
@@ -273,7 +273,7 @@ export class CRUDFactory {
     if (time) return moment(time).format(format);
   };
 
-  ToServerDate = date => {
+  toServerDate = date => {
     var momentDate = moment(date);
     if (momentDate.isValid()) {
       momentDate.local();
@@ -296,7 +296,7 @@ export class CRUDFactory {
 
   //Universal Catalogs:==========================================================
   async GetUniversalCatalog(catalog, params = '') {
-    return await Request('GET', `?name=${catalog}&${params}'&noCache=` + Number(new Date()), null, AppConfig.UniversalCatalogsURL)
+    return await Request('GET', `catalog?name=${catalog}&${params}'&noCache=` + Number(new Date()), null, AppConfig.UniversalCatalogsURL)
       .then(e => e.Result)
       .catch(this.GeneralError);
   }
@@ -304,7 +304,7 @@ export class CRUDFactory {
   async GetUniversalCatalogPaged(catalog, limit, page, params = '') {
     return await Request(
       'GET',
-      limit + `/${page}?name=${catalog}&${params}&noCache=` + Number(new Date()),
+      `catalog/${limit}/${page}?name=${catalog}&${params}&noCache=` + Number(new Date()),
       null,
       AppConfig.UniversalCatalogsURL
     )
@@ -313,9 +313,7 @@ export class CRUDFactory {
   }
 
   //Accounts:===================================================================
-  async GetAccounts(catalog, params = '') {
-    return await Request('GET', catalog + '?' + params + '&noCache=' + Number(new Date()), null, AppConfig.AuthURL).catch(
-      this.GeneralError
-    );
+  async GetAccounts(params = '') {
+    return await Request('GET', 'Account?' + params + '&noCache=' + Number(new Date()), null, AppConfig.AuthURL).catch(this.GeneralError);
   }
 }

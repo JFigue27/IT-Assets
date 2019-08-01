@@ -119,7 +119,6 @@
     <Compile Include="CRUD\Contract\Entity\IRepositoryReadOnly.cs" />
     <Compile Include="CRUD\Contract\Logic\ILogicWrite.cs" />
     <Compile Include="CRUD\Contract\Track\Trackable.cs" />
-    <Compile Include="CRUD\Entities\JsonEntities\Catalog.cs" />
     <Compile Include="CRUD\Entities\JsonEntities\Contact.cs" />
     <Compile Include="CRUD\Entities\Revision.cs" />
     <Compile Include="CRUD\Entities\Track.cs" />

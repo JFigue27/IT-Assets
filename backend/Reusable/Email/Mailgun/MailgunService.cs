@@ -22,11 +22,13 @@ namespace Reusable.EmailServices
             From = ConfigurationManager.AppSettings["mailgun.from"];
             API_KEY = ConfigurationManager.AppSettings["mailgun.api.key"];
 
-            Client = new RestClient
-            {
-                BaseUrl = new Uri(ConfigurationManager.AppSettings["mailgun.api.url"]),
-                Authenticator = new HttpBasicAuthenticator("api", API_KEY)
-            };
+            var url = ConfigurationManager.AppSettings["mailgun.api.url"];
+            if (!string.IsNullOrWhiteSpace(url))
+                Client = new RestClient
+                {
+                    BaseUrl = new Uri(url),
+                    Authenticator = new HttpBasicAuthenticator("api", API_KEY)
+                };
         }
 
         public IAppSettings AppSettings { get; set; }

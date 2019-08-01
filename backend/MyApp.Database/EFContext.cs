@@ -20,8 +20,11 @@ namespace MyApp.Database
         ///start:generated:dbsets<<<
         public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<AdditionalField> AdditionalFields { get; set; }
         public virtual DbSet<AdvancedSort> AdvancedSorts { get; set; }
         public virtual DbSet<Asset> Assets { get; set; }
+        public virtual DbSet<Catalog> Catalogs { get; set; }
+        public virtual DbSet<CatalogType> CatalogTypes { get; set; }
         public virtual DbSet<FilterData> FilterDatas { get; set; }
         public virtual DbSet<SortData> SortDatas { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
@@ -36,6 +39,7 @@ namespace MyApp.Database
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Ignore<AdditionalField>();
             modelBuilder.Ignore<Contact>();
 
             ///start:slot:model<<<///end:slot:model<<<

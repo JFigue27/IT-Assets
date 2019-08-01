@@ -1,0 +1,6 @@
+name: asset
+type: form
+entity: Asset
+load: this.load()
+layout:
+  - title: 'This is the [asset] component.'

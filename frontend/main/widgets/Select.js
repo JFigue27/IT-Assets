@@ -309,6 +309,7 @@ export default function IntegrationReactSelect(props) {
           value={adaptValue()}
           onChange={props.onChange}
           menuPlacement={props.placement}
+          maxMenuHeight={props.height || 250}
         />
         {/* <Select
           classes={classes}
