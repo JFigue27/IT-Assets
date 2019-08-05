@@ -142,7 +142,7 @@ class App extends React.Component {
               <Icon>menu</Icon>
             </IconButton> */}
               <Typography variant='h6' color='inherit'>
-                Main
+                <img src='/static/images/Molex_White.png' alt='molex-logo' style={{ width: 100 }} />
               </Typography>
               <Grid item xs />
 
