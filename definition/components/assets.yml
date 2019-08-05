@@ -3,4 +3,28 @@ type: list
 entity: Asset
 load: this.load()
 layout:
-  - title: 'This is the [assets] component.'
+  - container-fluid:
+  - h5: Assets
+  - pagination
+  - table:
+      columns:
+        - row:
+            - button: openItem
+        - CPU-Name
+        - Model
+        - Serial Number
+        - Ram
+        - CPU
+        - Location
+        - Usuario
+  - dialog:
+      id: asset
+      title: Defect
+      ok: Save
+      maxWith: sm
+      content:
+        - component: asset
+  - nav:
+      - search
+      - space
+      - button: create
