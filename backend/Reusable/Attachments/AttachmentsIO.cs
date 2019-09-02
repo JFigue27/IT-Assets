@@ -27,7 +27,7 @@ namespace Reusable.Attachments
                 string baseAttachmentsPath;
                 if (useAttachmentsRelativePath)
                 {
-                    baseAttachmentsPath =  "~/".MapHostAbsolutePath() + AppSettings.Get<string>(attachmentKind);
+                    baseAttachmentsPath = "~/".MapHostAbsolutePath() + AppSettings.Get<string>(attachmentKind);
                 }
                 else
                 {

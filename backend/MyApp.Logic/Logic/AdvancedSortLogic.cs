@@ -20,8 +20,9 @@ using System.Threading.Tasks;
 
 namespace MyApp.Logic
 {
-    public class AdvancedSortLogic : LogicWrite<AdvancedSort>, ILogicWriteAsync<AdvancedSort>
+    public class AdvancedSortLogic : WriteLogic<AdvancedSort>, ILogicWriteAsync<AdvancedSort>
     {
+        
         ///start:slot:init<<<///end:slot:init<<<
 
         ///start:slot:ctor<<<///end:slot:ctor<<<
@@ -37,7 +38,7 @@ namespace MyApp.Logic
         protected override SqlExpression<AdvancedSort> OnGetList(SqlExpression<AdvancedSort> query)
         {
             query.LeftJoin<SortData>()
-     .LeftJoin<FilterData>();
+                .LeftJoin<FilterData>();
 
             ///start:slot:listQuery<<<///end:slot:listQuery<<<
 
@@ -56,40 +57,40 @@ namespace MyApp.Logic
         {
             entity.UserName = Auth.UserName;
 
-foreach (var item in entity.Sorting)
-{
-    item.AdvancedSortId = entity.Id;
-}
-Db.SaveAll(entity.Sorting);
+            foreach (var item in entity.Sorting)
+            {
+                item.AdvancedSortId = entity.Id;
+            }
+            Db.SaveAll(entity.Sorting);
 
-foreach (var item in entity.Filtering)
-{
-    item.AdvancedSortId = entity.Id;
-}
-Db.SaveAll(entity.Filtering);
+            foreach (var item in entity.Filtering)
+            {
+                item.AdvancedSortId = entity.Id;
+            }
+            Db.SaveAll(entity.Filtering);
 
-if (mode == OPERATION_MODE.UPDATE)
-{
-    var originalEntity = GetById(entity.Id);
+            if (mode == OPERATION_MODE.UPDATE)
+            {
+                var originalEntity = GetById(entity.Id);
 
-    for (int i = originalEntity.Sorting.Count - 1; i >= 0; i--)
-    {
-        var oSort = originalEntity.Sorting[i];
-        if (!entity.Sorting.Any(e => e.Id == oSort.Id))
-        {
-            Db.Delete(oSort);
-        }
-    }
+                for (int i = originalEntity.Sorting.Count - 1; i >= 0; i--)
+                {
+                    var oSort = originalEntity.Sorting[i];
+                    if (!entity.Sorting.Any(e => e.Id == oSort.Id))
+                    {
+                        Db.Delete(oSort);
+                    }
+                }
 
-    for (int i = originalEntity.Filtering.Count - 1; i >= 0; i--)
-    {
-        var oFilter = originalEntity.Filtering[i];
-        if (!entity.Filtering.Any(e => e.Id == oFilter.Id))
-        {
-            Db.Delete(oFilter);
-        }
-    }
-}
+                for (int i = originalEntity.Filtering.Count - 1; i >= 0; i--)
+                {
+                    var oFilter = originalEntity.Filtering[i];
+                    if (!entity.Filtering.Any(e => e.Id == oFilter.Id))
+                    {
+                        Db.Delete(oFilter);
+                    }
+                }
+            }
 
             ///start:slot:beforeSave<<<///end:slot:beforeSave<<<
         }

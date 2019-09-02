@@ -10,6 +10,7 @@ import CatalogService from './catalog.service';
 ///start:slot:dependencies<<<
 import { FormControlLabel, Checkbox } from '@material-ui/core';
 import Select from '../../widgets/Select';
+import { withSnackbar } from 'notistack';
 ///end:slot:dependencies<<<
 
 const service = new CatalogService();
@@ -28,13 +29,13 @@ class CatalogForm extends FormContainer {
   componentDidMount() {
     console.log('Form did mount');
     this.load(this.props.data);
-    ///start:slot:didMount<<<
+    ///start:slot:load<<<
     if (this.props.parentType) {
       this.service.GetPaged(0, 1, '?CatalogType=' + this.props.parentType).then(parents => {
         this.setState({ parents: parents.Result });
       });
     }
-    ///end:slot:didMount<<<
+    ///end:slot:load<<<
   }
 
   AFTER_LOAD = entity => {
@@ -158,4 +159,4 @@ class CatalogForm extends FormContainer {
   }
 }
 
-export default withRouter(CatalogForm);
+export default withSnackbar(withRouter(CatalogForm));

@@ -2,6 +2,8 @@ import React from 'react';
 import { withRouter } from 'next/router';
 import { NoSsr, Typography, Grid, TextField } from '@material-ui/core';
 import FormContainer from '../../core/FormContainer';
+import { withSnackbar } from 'notistack';
+
 import { InputBase } from '@material-ui/core';
 
 import AssetService from './asset.service';
@@ -17,40 +19,36 @@ class AssetForm extends FormContainer {
   constructor(props, config) {
     Object.assign(defaultConfig, config);
     super(props, defaultConfig);
+
+    ///start:slot:ctor<<<///end:slot:ctor<<<
   }
 
   componentDidMount() {
-    console.log('Form did mount');
+    ///start:slot:load<<<
     this.load(this.props.data.Id);
-
-    ///start:slot:didMount<<<///end:slot:didMount<<<
+    ///end:slot:load<<<
   }
 
   AFTER_LOAD = entity => {
-    console.log('AFTER_LOAD', entity);
     ///start:slot:afterLoad<<<///end:slot:afterLoad<<<
   };
 
   AFTER_CREATE = instance => {
-    console.log('AFTER_CREATE', instance);
-
     ///start:slot:afterCreate<<<///end:slot:afterCreate<<<
   };
 
   AFTER_CREATE_AND_CHECKOUT = entity => {
-    console.log('AFTER_CREATE_AND_CHECKOUT', entity);
     ///start:slot:afterCreateCheckout<<<///end:slot:afterCreateCheckout<<<
   };
 
   AFTER_SAVE = entity => {
-    console.log('AFTER_SAVE', entity);
     const { dialog } = this.props;
     if (dialog) dialog.close('ok');
+
     ///start:slot:afterSave<<<///end:slot:afterSave<<<
   };
 
-  BEFORE_CHECKIN = () => {
-    console.log('BEFORE_CHECKIN');
+  BEFORE_CHECKIN = async () => {
     ///start:slot:beforeCheckin<<<///end:slot:beforeCheckin<<<
   };
 
@@ -60,7 +58,9 @@ class AssetForm extends FormContainer {
     const { dialog } = this.props;
     if (dialog) dialog.onOk = this.onDialogOk;
 
-    const { isLoading, baseEntity } = this.state;
+    const { isLoading, isDisabled, baseEntity } = this.state;
+
+    ///start:slot:render<<<///end:slot:render<<<
 
     return (
       <NoSsr>
@@ -71,8 +71,7 @@ class AssetForm extends FormContainer {
             value={baseEntity.CPUName || ''}
             onChange={event => this.handleInputChange(event, 'CPUName')}
             style={{ textAlign: 'left' }}
-            margin='normal'
-            disabled={this.isDisabled}
+            margin='dense'
             fullWidth
           />
           <TextField
@@ -81,8 +80,7 @@ class AssetForm extends FormContainer {
             value={baseEntity.Model || ''}
             onChange={event => this.handleInputChange(event, 'Model')}
             style={{ textAlign: 'left' }}
-            margin='normal'
-            disabled={this.isDisabled}
+            margin='dense'
             fullWidth
           />
           <TextField
@@ -91,8 +89,7 @@ class AssetForm extends FormContainer {
             value={baseEntity.SerialNumber || ''}
             onChange={event => this.handleInputChange(event, 'SerialNumber')}
             style={{ textAlign: 'left' }}
-            margin='normal'
-            disabled={this.isDisabled}
+            margin='dense'
             fullWidth
           />
           <TextField
@@ -101,8 +98,7 @@ class AssetForm extends FormContainer {
             value={baseEntity.Ram || ''}
             onChange={event => this.handleInputChange(event, 'Ram')}
             style={{ textAlign: 'left' }}
-            margin='normal'
-            disabled={this.isDisabled}
+            margin='dense'
             fullWidth
           />
           <TextField
@@ -111,8 +107,7 @@ class AssetForm extends FormContainer {
             value={baseEntity.CPU || ''}
             onChange={event => this.handleInputChange(event, 'CPU')}
             style={{ textAlign: 'left' }}
-            margin='normal'
-            disabled={this.isDisabled}
+            margin='dense'
             fullWidth
           />
           <TextField
@@ -121,8 +116,7 @@ class AssetForm extends FormContainer {
             value={baseEntity.Location || ''}
             onChange={event => this.handleInputChange(event, 'Location')}
             style={{ textAlign: 'left' }}
-            margin='normal'
-            disabled={this.isDisabled}
+            margin='dense'
             fullWidth
           />
           <TextField
@@ -131,8 +125,7 @@ class AssetForm extends FormContainer {
             value={baseEntity.Usuario || ''}
             onChange={event => this.handleInputChange(event, 'Usuario')}
             style={{ textAlign: 'left' }}
-            margin='normal'
-            disabled={this.isDisabled}
+            margin='dense'
             fullWidth
           />
         </Grid>
@@ -141,4 +134,4 @@ class AssetForm extends FormContainer {
   }
 }
 
-export default withRouter(AssetForm);
+export default withSnackbar(withRouter(AssetForm));

@@ -41,11 +41,11 @@ class CatalogsList extends ListContainer {
   componentDidMount() {
     console.log('List did mount');
     this.load(this.props.router.query);
-    ///start:slot:didMount<<<
+    ///start:slot:load<<<
     catalogTypeService.GetSingleWhere('Name', this.props.router.query.name).then(response => {
       this.setState({ additionalFields: response.ConvertedFields, parentType: response.ParentType });
     });
-    ///end:slot:didMount<<<
+    ///end:slot:load<<<
   }
 
   AFTER_LOAD = () => {

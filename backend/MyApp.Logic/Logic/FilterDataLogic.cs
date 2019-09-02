@@ -20,8 +20,9 @@ using System.Threading.Tasks;
 
 namespace MyApp.Logic
 {
-    public class FilterDataLogic : LogicWrite<FilterData>, ILogicWriteAsync<FilterData>
+    public class FilterDataLogic : WriteLogic<FilterData>, ILogicWriteAsync<FilterData>
     {
+        
         ///start:slot:init<<<///end:slot:init<<<
 
         ///start:slot:ctor<<<///end:slot:ctor<<<

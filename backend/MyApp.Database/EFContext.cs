@@ -18,6 +18,7 @@ namespace MyApp.Database
 
         #region App
         ///start:generated:dbsets<<<
+        public virtual DbSet<Approval> Approvals { get; set; }
         public virtual DbSet<Email> Emails { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<AdditionalField> AdditionalFields { get; set; }
@@ -27,6 +28,7 @@ namespace MyApp.Database
         public virtual DbSet<CatalogType> CatalogTypes { get; set; }
         public virtual DbSet<FilterData> FilterDatas { get; set; }
         public virtual DbSet<SortData> SortDatas { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         ///end:generated:dbsets<<<
         #endregion

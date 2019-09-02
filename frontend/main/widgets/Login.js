@@ -32,22 +32,21 @@ const Login = props => {
       <div className='login'>
         <Card className='card'>
           <form onSubmit={login}>
-            <CardContent style={{ textAlign: 'center' }}>
-              <img src='/static/images/molex_logon_page.png' alt='' style={{ width: 150, height: 150 }} />
-              <Typography style={{ margin: '5px 5px' }} variant='h4' align='center' color='inherit'>
-                IT - Assets
+            <CardContent>
+              <Typography style={{ margin: '40px 5px' }} variant='h4' align='center' color='inherit'>
+                Main
               </Typography>
               {/* <div className="finger">
                 <Fingerprint style={{ fontSize: 80 }} />
               </div> */}
               <div className='text-field'>
-                <TextField required fullWidth label='User' margin='normal' onChange={event => setUsername(event.target.value)} />
+                <TextField required fullWidth label='Usuario' margin='normal' onChange={event => setUsername(event.target.value)} />
               </div>
               <div className='text-field'>
                 <TextField
                   required
                   fullWidth
-                  label='Password'
+                  label='Contraseña'
                   type='password'
                   autoComplete='current-password'
                   margin='normal'
@@ -58,7 +57,7 @@ const Login = props => {
               <div className='botton'>
                 <Fab variant='extended' aria-label='Delete' type='submit'>
                   <Lock />
-                  Login
+                  Inicio de Sesion
                 </Fab>
               </div>
             </CardContent>

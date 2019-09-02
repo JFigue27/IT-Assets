@@ -19,7 +19,7 @@ layout:
         - Usuario
   - dialog:
       id: asset
-      title: Defect
+      title: Asset
       ok: Save
       maxWith: sm
       content:

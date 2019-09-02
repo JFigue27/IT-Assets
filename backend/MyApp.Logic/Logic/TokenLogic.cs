@@ -20,8 +20,9 @@ using System.Threading.Tasks;
 
 namespace MyApp.Logic
 {
-    public class TokenLogic : LogicWrite<Token>, ILogicWriteAsync<Token>
+    public class TokenLogic : WriteLogic<Token>, ILogicWriteAsync<Token>
     {
+        
         ///start:slot:init<<<///end:slot:init<<<
 
         ///start:slot:ctor<<<///end:slot:ctor<<<

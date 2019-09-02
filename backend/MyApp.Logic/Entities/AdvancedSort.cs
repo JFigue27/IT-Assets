@@ -28,6 +28,7 @@ namespace MyApp.Logic.Entities
         [Reference]
         public List<FilterData> Filtering { get; set; }
 
+        
         ///start:slot:properties<<<///end:slot:properties<<<
     }
 }

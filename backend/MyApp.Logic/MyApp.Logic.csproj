@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <!-- start:generated:entities -->
+    <Compile Include="Entities\Approval.cs" />
     <Compile Include="Entities\Email.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\AdditionalField.cs" />
@@ -97,9 +98,11 @@
     <Compile Include="Entities\CatalogType.cs" />
     <Compile Include="Entities\FilterData.cs" />
     <Compile Include="Entities\SortData.cs" />
+    <Compile Include="Entities\Task.cs" />
     <Compile Include="Entities\Token.cs" />
     <!-- end:generated:entities -->
     <!-- start:generated:Logic -->
+    <Compile Include="Logic\ApprovalLogic.cs" />
     <Compile Include="Logic\EmailLogic.cs" />
     <Compile Include="Logic\UserLogic.cs" />
     <Compile Include="Logic\AdditionalFieldLogic.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="Logic\CatalogTypeLogic.cs" />
     <Compile Include="Logic\FilterDataLogic.cs" />
     <Compile Include="Logic\SortDataLogic.cs" />
+    <Compile Include="Logic\TaskLogic.cs" />
     <Compile Include="Logic\TokenLogic.cs" />
     <!-- end:generated:Logic -->
     <Compile Include="Namespaces.cs" />

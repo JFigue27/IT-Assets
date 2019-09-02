@@ -25,6 +25,7 @@ namespace MyApp.Logic.Entities
         public string Parent { get; set; }
         public string Meta { get; set; }
 
+        
         ///start:slot:properties<<<///end:slot:properties<<<
     }
 }

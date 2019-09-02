@@ -20,8 +20,9 @@ using System.Threading.Tasks;
 
 namespace MyApp.Logic
 {
-    public class AdditionalFieldLogic : LogicWrite<AdditionalField>, ILogicWriteAsync<AdditionalField>
+    public class AdditionalFieldLogic : WriteLogic<AdditionalField>, ILogicWriteAsync<AdditionalField>
     {
+        
         ///start:slot:init<<<///end:slot:init<<<
 
         ///start:slot:ctor<<<///end:slot:ctor<<<

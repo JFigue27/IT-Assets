@@ -20,8 +20,9 @@ using System.Threading.Tasks;
 
 namespace MyApp.Logic
 {
-    public class SortDataLogic : LogicWrite<SortData>, ILogicWriteAsync<SortData>
+    public class SortDataLogic : WriteLogic<SortData>, ILogicWriteAsync<SortData>
     {
+        
         ///start:slot:init<<<///end:slot:init<<<
 
         ///start:slot:ctor<<<///end:slot:ctor<<<

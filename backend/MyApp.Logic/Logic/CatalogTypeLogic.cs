@@ -20,8 +20,9 @@ using System.Threading.Tasks;
 
 namespace MyApp.Logic
 {
-    public class CatalogTypeLogic : LogicWrite<CatalogType>, ILogicWriteAsync<CatalogType>
+    public class CatalogTypeLogic : WriteLogic<CatalogType>, ILogicWriteAsync<CatalogType>
     {
+        
         ///start:slot:init<<<///end:slot:init<<<
 
         ///start:slot:ctor<<<///end:slot:ctor<<<
@@ -54,18 +55,18 @@ namespace MyApp.Logic
         {
             if (string.IsNullOrWhiteSpace(entity.Name)) throw new KnownError("Invalid Name.");
 
-        if (mode == OPERATION_MODE.UPDATE)
-        {
-            var original = GetById(entity.Id);
-            if (original == null) throw new KnownError("Error. Entity no longer exists.");
-
-            if (original.Name != entity.Name)
+            if (mode == OPERATION_MODE.UPDATE)
             {
-                Db.Update<Catalog>(new { CatalogType = entity.Name }, e => e.CatalogType == original.Name);
-                Db.Update<CatalogType>(new { ParentType = entity.Name }, e => e.ParentType == original.Name);
-                Db.Update<Catalog>(new { Parent = entity.Name }, e => e.Parent == original.Name);
+                var original = GetById(entity.Id);
+                if (original == null) throw new KnownError("Error. Entity no longer exists.");
+
+                if (original.Name != entity.Name)
+                {
+                    Db.Update<Catalog>(new { CatalogType = entity.Name }, e => e.CatalogType == original.Name);
+                    Db.Update<CatalogType>(new { ParentType = entity.Name }, e => e.ParentType == original.Name);
+                    Db.Update<Catalog>(new { Parent = entity.Name }, e => e.Parent == original.Name);
+                }
             }
-        }
 
             ///start:slot:beforeSave<<<///end:slot:beforeSave<<<
         }

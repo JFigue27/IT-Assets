@@ -24,6 +24,7 @@ namespace MyApp.Logic.Entities
         public string AscDesc { get; set; }
         public long AdvancedSortId { get; set; }
 
+        
         ///start:slot:properties<<<///end:slot:properties<<<
     }
 }

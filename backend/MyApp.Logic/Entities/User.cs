@@ -44,6 +44,7 @@ namespace MyApp.Logic.Entities
         [Ignore]
         public bool ChangePassword { get; set; }
 
+        
         ///start:slot:properties<<<///end:slot:properties<<<
     }
 }

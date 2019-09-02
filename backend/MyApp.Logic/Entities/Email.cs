@@ -15,7 +15,10 @@ namespace MyApp.Logic.Entities
     {
         public Email()
         {
-            
+            To = new List<Contact>();
+            Cc = new List<Contact>();
+            Bcc = new List<Contact>();
+            Attachments = new List<Attachment>();
             ///start:slot:ctor<<<///end:slot:ctor<<<
         }
 
@@ -32,6 +35,7 @@ namespace MyApp.Logic.Entities
         [Ignore]
         public bool IsResent { get; set; }
 
+        
         ///start:slot:properties<<<///end:slot:properties<<<
     }
 }

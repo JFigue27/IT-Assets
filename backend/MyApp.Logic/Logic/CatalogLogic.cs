@@ -20,8 +20,9 @@ using System.Threading.Tasks;
 
 namespace MyApp.Logic
 {
-    public class CatalogLogic : LogicWrite<Catalog>, ILogicWriteAsync<Catalog>
+    public class CatalogLogic : WriteLogic<Catalog>, ILogicWriteAsync<Catalog>
     {
+        
         ///start:slot:init<<<///end:slot:init<<<
 
         ///start:slot:ctor<<<///end:slot:ctor<<<
@@ -37,8 +38,8 @@ namespace MyApp.Logic
         protected override SqlExpression<Catalog> OnGetList(SqlExpression<Catalog> query)
         {
             var name = Request.QueryString["name"];
-        if (IsValidJSValue(name))
-            query.Where(e => e.CatalogType == name);
+            if (IsValidJSValue(name))
+                query.Where(e => e.CatalogType == name);
 
             ///start:slot:listQuery<<<///end:slot:listQuery<<<
 
@@ -56,7 +57,7 @@ namespace MyApp.Logic
         protected override void OnBeforeSaving(Catalog entity, OPERATION_MODE mode = OPERATION_MODE.NONE)
         {
             if (string.IsNullOrWhiteSpace(entity.CatalogType))
-            throw new KnownError("Error. Catalog Type is a required field.");
+                throw new KnownError("Error. Catalog Type is a required field.");
 
             ///start:slot:beforeSave<<<///end:slot:beforeSave<<<
         }

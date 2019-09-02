@@ -23,6 +23,7 @@ namespace MyApp.Logic
 {
     public class EmailLogic : DocumentLogic<Email>, IDocumentLogicAsync<Email>
     {
+        
         ///start:slot:init<<<///end:slot:init<<<
 
         ///start:slot:ctor<<<///end:slot:ctor<<<

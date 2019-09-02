@@ -20,9 +20,10 @@ namespace MyApp.Logic.Entities
         }
 
         public string Key { get; set; }
-        public int Value { get; set; }
+        public string Value { get; set; }
         public long AdvancedSortId { get; set; }
 
+        
         ///start:slot:properties<<<///end:slot:properties<<<
     }
 }

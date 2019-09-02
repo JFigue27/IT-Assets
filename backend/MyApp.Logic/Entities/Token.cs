@@ -25,6 +25,7 @@ namespace MyApp.Logic.Entities
         public string ForeignType { get; set; }
         public long ForeignKey { get; set; }
 
+        
         ///start:slot:properties<<<///end:slot:properties<<<
     }
 }

@@ -20,8 +20,9 @@ using System.Threading.Tasks;
 
 namespace MyApp.Logic
 {
-    public class AssetLogic : LogicWrite<Asset>, ILogicWriteAsync<Asset>
+    public class AssetLogic : WriteLogic<Asset>, ILogicWriteAsync<Asset>
     {
+        
         ///start:slot:init<<<///end:slot:init<<<
 
         ///start:slot:ctor<<<///end:slot:ctor<<<

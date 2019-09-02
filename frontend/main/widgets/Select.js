@@ -15,7 +15,8 @@ import PropTypes from 'prop-types';
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    background: 'white'
+    background: 'white',
+    marginBottom: 4
   },
   input: {
     display: 'flex',
@@ -45,7 +46,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     left: 2,
     bottom: 6,
-    fontSize: 16
+    fontSize: '.8em'
   },
   paper: {
     position: 'absolute',
@@ -92,6 +93,7 @@ function Control(props) {
   return (
     <TextField
       fullWidth
+      disabled={props.isDisabled}
       InputProps={{
         inputComponent,
         disableUnderline: props.disableUnderline,
@@ -284,6 +286,7 @@ export default function IntegrationReactSelect(props) {
           label: item[labelProp],
           email: item[emailProp]
         };
+      else return null;
     }
   };
 
@@ -310,6 +313,7 @@ export default function IntegrationReactSelect(props) {
           onChange={props.onChange}
           menuPlacement={props.placement}
           maxMenuHeight={props.height || 250}
+          isDisabled={props.disabled}
         />
         {/* <Select
           classes={classes}

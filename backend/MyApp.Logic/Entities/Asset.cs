@@ -27,6 +27,7 @@ namespace MyApp.Logic.Entities
         public string Location { get; set; }
         public string Usuario { get; set; }
 
+        
         ///start:slot:properties<<<///end:slot:properties<<<
     }
 }

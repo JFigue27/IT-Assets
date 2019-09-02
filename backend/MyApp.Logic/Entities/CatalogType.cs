@@ -23,6 +23,7 @@ namespace MyApp.Logic.Entities
         public string ParentType { get; set; }
         public string Fields { get; set; }
 
+        
         ///start:slot:properties<<<///end:slot:properties<<<
     }
 }

@@ -17,7 +17,9 @@
 @import './styles-theme.scss';
 
 body {
-  padding: 50px 0;
+  font-family: 'Roboto';
+  padding-top: 60px;
+  padding-bottom: 120px;
 }
 
 .filled {
@@ -26,7 +28,7 @@ body {
     border: 1px solid transparent;
     padding: 3px;
     // font-size: 0.7em;
-    height: 17px;
+    height: 26px;
     margin: 0;
   }
 }
@@ -36,7 +38,7 @@ body {
   // border: darkgray 1px solid;
   background: #deedf8;
   border: 1px solid #2185d0;
-  height: 17px;
+  // height: 17px;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -46,8 +48,28 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .Person-Chip {
-  margin-left: 8px;
-  margin-top: 8px;
+  margin-left: 2px;
+  margin-top: 2px;
+}
+
+.Approved-Chip {
+  background-color: green !important;
+  color: white !important;
+}
+
+.Rejected-Chip {
+  background-color: red !important;
+  color: white !important;
+}
+
+.Approval-Approved {
+  background-color: lightgreen;
+}
+
+.Approval-Rejected {
+  // background-color: darkgray;
+  color: darkred;
+  border: darkred;
 }
 
 .Sheet {
@@ -66,4 +88,56 @@ input[type='number']::-webkit-outer-spin-button {
 
 .CellEditable {
   background: aliceblue;
+}
+
+.well {
+  // margin: 10px 0 !important;
+  padding: 0;
+  padding-top: 5px;
+  border: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  // background-color: lightgray;
+}
+
+.BottomToolbar {
+  .MuiToolbar-root {
+    & > button {
+      margin-left: 5px;
+      min-width: inherit;
+      .MuiIcon-root {
+        font-size: 1.3em;
+      }
+    }
+    .MuiGrid-item {
+      margin-left: 10px;
+      .MuiTypography-root {
+        line-height: 1.5;
+      }
+    }
+    .MuiButton-contained {
+      span {
+        margin-right: 3px;
+      }
+    }
+    .MuiButtonGroup-root {
+      margin-left: 3px;
+    }
+  }
+
+  .FloatingButton {
+    width: 70px;
+    button {
+      position: fixed;
+      bottom: 25px;
+      right: 10px;
+      z-index: 500;
+      width: 70px;
+      height: 70px;
+      .MuiIcon-root {
+        font-size: 40px;
+      }
+    }
+  }
 }
