@@ -145,7 +145,6 @@ class App extends React.Component {
                 <img src='/static/images/Molex_White.png' alt='molex-logo' style={{ width: 100 }} />
               </Typography>
               <Grid item xs />
-
               <Tabs variant='standard' value={this.state.currentTab} onChange={this.handleTabsChange}>
                 {this.pages.map(page => {
                   return <LinkTab key={page.label} label={page.label} href={page.href} />;
