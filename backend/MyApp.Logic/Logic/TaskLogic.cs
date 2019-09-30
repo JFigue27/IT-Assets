@@ -177,7 +177,7 @@ namespace MyApp.Logic
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
-        protected override IEnumerable<Task> AdapterOut(params Task[] entities)
+        protected override List<Task> AdapterOut(params Task[] entities)
         {
             ///start:slot:adapterOut<<<///end:slot:adapterOut<<<
 
@@ -186,7 +186,7 @@ namespace MyApp.Logic
                 
             }
 
-            return entities;
+            return entities.ToList();
         }
 
         private SqlExpression<Task> OrderBy(SqlExpression<Task> query, SortData sort)

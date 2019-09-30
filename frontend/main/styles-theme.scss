@@ -2,11 +2,16 @@
 
 .app-nav {
   .MuiToolbar-regular {
-    background-color: black;
+    background: #000000;
   }
 
   .app-nav-item {
     &:hover {
+      color: #ff0000;
+    }
+
+    &:focus {
+      color: #ff0000;
     }
 
     &:active {

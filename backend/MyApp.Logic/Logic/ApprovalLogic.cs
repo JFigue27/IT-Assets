@@ -81,7 +81,7 @@ namespace MyApp.Logic
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
-        protected override IEnumerable<Approval> AdapterOut(params Approval[] entities)
+        protected override List<Approval> AdapterOut(params Approval[] entities)
         {
             ///start:slot:adapterOut<<<///end:slot:adapterOut<<<
 
@@ -96,7 +96,7 @@ namespace MyApp.Logic
 
             }
 
-            return entities;
+            return entities.ToList();
         }
 
         protected override void OnFinalize(Approval entity)

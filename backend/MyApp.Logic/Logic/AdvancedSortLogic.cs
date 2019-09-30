@@ -107,7 +107,7 @@ namespace MyApp.Logic
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
-        protected override IEnumerable<AdvancedSort> AdapterOut(params AdvancedSort[] entities)
+        protected override List<AdvancedSort> AdapterOut(params AdvancedSort[] entities)
         {
             ///start:slot:adapterOut<<<///end:slot:adapterOut<<<
 
@@ -116,7 +116,7 @@ namespace MyApp.Logic
                 item.Sorting = item.Sorting.OrderBy(e => e.Sequence).ToList();
             }
 
-            return entities;
+            return entities.ToList();
         }
 
         

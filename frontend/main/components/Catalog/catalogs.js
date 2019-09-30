@@ -95,7 +95,7 @@ class CatalogsList extends ListContainer {
     });
   };
   ///start:slot:js<<<
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.initFilterOptions(this.props.router.query.name);
     this.initSortOptions(this.props.router.query.name);
   }
@@ -154,7 +154,7 @@ class CatalogsList extends ListContainer {
                         </Grid>
                       </TableCell>
                       <TableCell>{item.Value}</TableCell>
-                      {parentType && <TableCell>{item.ParentValue}</TableCell>}
+                      {parentType && <TableCell>{item.Parent}</TableCell>}
                       <TableCell>{(item.Hidden || '').toString().toUpperCase()}</TableCell>
                       {additionalFields &&
                         additionalFields.map(field => <TableCell key={field.FieldName}>{item.ConvertedMeta[field.FieldName]}</TableCell>)}

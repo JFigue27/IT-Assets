@@ -37,7 +37,7 @@ namespace Reusable.CRUD.Implementations.SS
 
             OnAfterSaving(entity, OPERATION_MODE.ADD);
 
-            AdapterOut(entity);
+            //AdapterOut(entity);
 
             CacheOnAdd(entity);
 
@@ -52,7 +52,7 @@ namespace Reusable.CRUD.Implementations.SS
 
             OnAfterSaving(entity, OPERATION_MODE.ADD);
 
-            AdapterOut(entity);
+            //AdapterOut(entity);
 
             CacheOnAdd(entity);
 
@@ -67,7 +67,7 @@ namespace Reusable.CRUD.Implementations.SS
 
             OnAfterSaving(entity, OPERATION_MODE.UPDATE);
 
-            AdapterOut(entity);
+            //AdapterOut(entity);
 
             CacheOnUpdate(entity);
 
@@ -82,7 +82,7 @@ namespace Reusable.CRUD.Implementations.SS
 
             OnAfterSaving(entity, OPERATION_MODE.UPDATE);
 
-            AdapterOut(entity);
+            //AdapterOut(entity);
 
             CacheOnUpdate(entity);
 

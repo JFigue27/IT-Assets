@@ -29,7 +29,7 @@ namespace Reusable.CRUD.Implementations.SS
         #region HOOKS
         virtual protected SqlExpression<Entity> OnGetList(SqlExpression<Entity> query) { return query; }
         virtual protected SqlExpression<Entity> OnGetSingle(SqlExpression<Entity> query) { return OnGetList(query); }
-        virtual protected IEnumerable<Entity> AdapterOut(params Entity[] entities) { return entities.ToList(); }
+        virtual protected List<Entity> AdapterOut(params Entity[] entities) { return entities.ToList(); }
         virtual protected List<Entity> BeforePaginate(List<Entity> entities) { return entities; }
         virtual protected bool PopulateForSearch(params Entity[] entities) { return false; } // return true to avoid calling AdapterOut when getPage because they are the same.
         #endregion
@@ -38,7 +38,7 @@ namespace Reusable.CRUD.Implementations.SS
         {
             var cache = Cache.Get<List<Entity>>(CACHE_GET_ALL);
             if (cache != null)
-                return cache;
+                return AdapterOut(cache.ToArray());
 
             var query = OnGetList(Db.From<Entity>());
             var entities = AdapterOut(BeforePaginate(Db.LoadSelect(query)).ToArray());
@@ -52,7 +52,7 @@ namespace Reusable.CRUD.Implementations.SS
         {
             var cache = Cache.Get<List<Entity>>(CACHE_GET_ALL);
             if (cache != null)
-                return cache;
+                return AdapterOut(cache.ToArray());
 
             var query = OnGetList(Db.From<Entity>());
             var entities = AdapterOut(BeforePaginate(await Db.LoadSelectAsync(query)).ToArray());
@@ -68,7 +68,7 @@ namespace Reusable.CRUD.Implementations.SS
 
             var cache = Cache.Get<Entity>(cacheKey);
             if (cache != null)
-                return cache;
+                return AdapterOut(cache)[0];
 
             var query = OnGetSingle(Db.From<Entity>())
                     .Where(e => e.Id == id);
@@ -88,7 +88,7 @@ namespace Reusable.CRUD.Implementations.SS
 
             var cache = Cache.Get<Entity>(cacheKey);
             if (cache != null)
-                return cache;
+                return AdapterOut(cache)[0];
 
             var query = OnGetSingle(Db.From<Entity>())
                     .Where(e => e.Id == id);
@@ -159,7 +159,12 @@ namespace Reusable.CRUD.Implementations.SS
 
             #region From Cache
             cacheContainer.TryGetValue(cacheKey, out CommonResponse cache);
-            if (cache != null) return cache;
+            if (cache != null)
+            {
+                var cacheList = cache.Result as IEnumerable<Entity>;
+                AdapterOut(cacheList.ToArray());
+                return cache;
+            }
             #endregion
 
             #region OnGetList Hook
@@ -306,7 +311,12 @@ namespace Reusable.CRUD.Implementations.SS
 
             #region From Cache
             cacheContainer.TryGetValue(cacheKey, out CommonResponse cache);
-            if (cache != null) return cache;
+            if (cache != null)
+            {
+                var cacheList = cache.Result as IEnumerable<Entity>;
+                AdapterOut(cacheList.ToArray());
+                return cache;
+            }
             #endregion
 
             #region OnGetList Hook
@@ -476,7 +486,7 @@ namespace Reusable.CRUD.Implementations.SS
             }
 
             cacheContainer.TryGetValue(cacheKey, out Entity cache);
-            if (cache != null) return cache;
+            if (cache != null) return AdapterOut(cache)[0];
 
             query = OnGetSingle(query);
 
@@ -576,7 +586,7 @@ namespace Reusable.CRUD.Implementations.SS
             }
 
             cacheContainer.TryGetValue(cacheKey, out Entity cache);
-            if (cache != null) return cache;
+            if (cache != null) return AdapterOut(cache)[0];
 
             query = OnGetSingle(query);
 

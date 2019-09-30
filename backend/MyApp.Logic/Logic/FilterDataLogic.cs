@@ -69,7 +69,7 @@ namespace MyApp.Logic
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
-        protected override IEnumerable<FilterData> AdapterOut(params FilterData[] entities)
+        protected override List<FilterData> AdapterOut(params FilterData[] entities)
         {
             ///start:slot:adapterOut<<<///end:slot:adapterOut<<<
 
@@ -78,7 +78,7 @@ namespace MyApp.Logic
                 
             }
 
-            return entities;
+            return entities.ToList();
         }
 
         

@@ -69,7 +69,7 @@ namespace MyApp.Logic
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
-        protected override IEnumerable<Token> AdapterOut(params Token[] entities)
+        protected override List<Token> AdapterOut(params Token[] entities)
         {
             ///start:slot:adapterOut<<<///end:slot:adapterOut<<<
 
@@ -78,7 +78,7 @@ namespace MyApp.Logic
                 
             }
 
-            return entities;
+            return entities.ToList();
         }
 
         

@@ -21,7 +21,7 @@ class FormContainer extends React.Component {
     this.service = this.state.config.service;
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.auth = this.context.auth;
   }
 
@@ -39,8 +39,8 @@ class FormContainer extends React.Component {
     return await this.refreshForm();
   };
 
-  refreshForm = async () => {
-    let criteria = this.criteria;
+  refreshForm = async criteriaParam => {
+    let criteria = criteriaParam === undefined ? this.criteria : criteriaParam;
     console.log('Form criteria: ' + criteria);
 
     //Clear form:
@@ -116,15 +116,23 @@ class FormContainer extends React.Component {
     }
   };
 
-  save = async () => {
-    this.BEFORE_SAVE(this.state.baseEntity);
-    return await this.service.Save(this.state.baseEntity).then(baseEntity => {
-      baseEntity.isOpened = true;
-      this.AFTER_SAVE(baseEntity);
-      this.ON_CHANGE(baseEntity);
-      this.setState({ baseEntity });
-      this.success('Saved.');
-    });
+  save = () => {
+    return this.BEFORE_SAVE(this.state.baseEntity)
+      .then((entity = this.state.baseEntity) => {
+        return this.service.Save(entity).then(baseEntity => {
+          baseEntity.isOpened = true;
+          this.AFTER_SAVE(baseEntity);
+          this.ON_CHANGE(baseEntity);
+          this.setState({ baseEntity });
+          this.success('Saved.');
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        let sError = JSON.stringify(error);
+        this.error(sError);
+        // alert(sError);
+      });
   };
 
   loadRevision = selectedRevision => {
@@ -169,7 +177,8 @@ class FormContainer extends React.Component {
     return await this.service
       .Checkout(this.state.baseEntity)
       .then(response => {
-        this.load(response);
+        this.refreshForm();
+        // this.setState({ isDisabled: false });
         this.success('Checked Out.');
       })
       .catch(() => {
@@ -179,27 +188,31 @@ class FormContainer extends React.Component {
 
   cancelCheckout = async () => {
     return await this.service.CancelCheckout(this.state.baseEntity).then(response => {
-      this.load(response);
+      this.refreshForm();
+      // this.setState({ isDisabled: true });
       this.success('Cancel Checked Out.');
     });
   };
 
   checkin = async event => {
     if (event) event.stopPropagation();
+    let { baseEntity } = this.state;
 
     let message = prompt(`Optional message to reference this update.`);
     if (message !== null) {
-      this.state.baseEntity.Entry_State = 1;
-      this.state.baseEntity.RevisionMessage = message;
-      return this.BEFORE_CHECKIN().then(() => {
-        return this.service.Checkin(this.state.baseEntity).then(response => {
-          this.load(response).then(() => {
-            this.formMode = null;
-            this.setState({ isDisabled: true });
-            this.success('Checked In.');
+      baseEntity.Entry_State = 1;
+      baseEntity.RevisionMessage = message;
+      return this.BEFORE_CHECKIN(baseEntity)
+        .then((entity = baseEntity) => this.BEFORE_SAVE(entity))
+        .then((entity = baseEntity) => {
+          return this.service.Checkin(entity).then(response => {
+            this.refreshForm(response).then(() => {
+              this.formMode = null;
+              // this.setState({ isDisabled: true });
+              this.success('Checked In.');
+            });
           });
         });
-      });
     }
   };
 
@@ -272,22 +285,32 @@ class FormContainer extends React.Component {
     this.setState({ baseEntity });
   };
 
-  getCurrentUser = () => this.auth && this.auth.user;
+  getCurrentUser = () => (this.auth && this.auth.user) || {};
 
-  getCheckoutUser = () => {
-    if (this.state.baseEntity && this.state.baseEntity.CheckedoutBy) return this.state.baseEntity.CheckedoutBy;
+  getCheckoutUser = entity => {
+    let baseEntity = entity || this.state.baseEntity;
+    if (baseEntity && baseEntity.CheckedoutBy) return baseEntity.CheckedoutBy;
+    return '';
+  };
+
+  isCheckedOutByCurrentUser = entity => {
+    let user = this.getCurrentUser();
+    let checkedOutBy = this.getCheckoutUser(entity);
+    if (user.UserName && checkedOutBy && checkedOutBy.toLowerCase() == user.UserName.toLowerCase()) {
+      return true;
+    }
+    return false;
   };
 
   _afterLoad = baseEntity => {
-    let user = this.getCurrentUser();
-    if (user && user.UserName && baseEntity.CheckedoutBy && baseEntity.CheckedoutBy.toLowerCase() == user.UserName.toLowerCase())
-      this.setState({
-        isDisabled: false
-      });
-    else
-      this.setState({
-        isDisabled: true
-      });
+    console.log('_afrerLoad');
+    if (this.isCheckedOutByCurrentUser(baseEntity)) {
+      // debugger;
+      this.setState({ isDisabled: false });
+    } else {
+      // debugger;
+      this.setState({ isDisabled: true });
+    }
 
     this.AFTER_LOAD(baseEntity);
   };
@@ -354,7 +377,7 @@ class FormContainer extends React.Component {
 
   AFTER_CREATE_AND_CHECKOUT = entity => {};
 
-  BEFORE_SAVE = entity => {};
+  BEFORE_SAVE = async entity => {};
 
   AFTER_SAVE(entity) {}
 
@@ -367,7 +390,7 @@ class FormContainer extends React.Component {
   };
 
   render() {
-    return <></>;
+    return null;
   }
 }
 

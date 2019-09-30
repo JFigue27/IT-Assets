@@ -66,7 +66,7 @@ class ListContainer extends FormContainer {
     if (event.charCode == 13) this.refresh();
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.initFilterOptions();
     this.initSortOptions();
     this.auth = this.context.auth;
@@ -239,15 +239,24 @@ class ListContainer extends FormContainer {
     });
   };
 
-  removeItem = (event, item) => {
+  removeItem = async (event, item) => {
     if (event) event.stopPropagation();
-    this.setState({ isLoading: true });
 
-    if (confirm('Do you really want to delete it?'))
-      this.service.RemoveById(item.Id).then(() => {
+    if (confirm('Do you really want to delete it?')) {
+      try {
+        this.setState({ isLoading: true });
+        await this.service.RemoveById(item.Id);
         this.AFTER_REMOVE(item);
+      } finally {
         this.setState({ isLoading: false });
-      });
+      }
+    }
+  };
+
+  removeItemOnSave = (event, index, arrRows = this.state.baseList) => {
+    if (event) event.stopPropagation();
+    arrRows[index].Entry_State = 2;
+    this.onInputChange();
   };
 
   localRemoveItem = (event, index, arrRows = this.state.baseList) => {
@@ -479,7 +488,7 @@ class ListContainer extends FormContainer {
   ON_FILTER_CHANGE(filterOptions, field) {}
 
   render() {
-    return <div />;
+    return null;
   }
 }
 

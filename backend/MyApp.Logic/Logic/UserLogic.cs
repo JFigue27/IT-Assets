@@ -129,7 +129,7 @@ namespace MyApp.Logic
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
-        protected override IEnumerable<User> AdapterOut(params User[] entities)
+        protected override List<User> AdapterOut(params User[] entities)
         {
             ///start:slot:adapterOut<<<///end:slot:adapterOut<<<
 
@@ -138,7 +138,7 @@ namespace MyApp.Logic
                 
             }
 
-            return entities;
+            return entities.ToList();
         }
 
         protected override void OnFinalize(User entity)

@@ -66,15 +66,7 @@ class CatalogForm extends FormContainer {
     ///start:slot:beforeCheckin<<<///end:slot:beforeCheckin<<<
   };
 
-  ///start:slot:js<<<
-  handleAutocompleteChange = (value, field) => {
-    let baseEntity = this.state.baseEntity;
-    baseEntity[field] = value ? value.Id : null;
-    baseEntity.ParentValue = value ? value.label : null;
-    this.setState({ baseEntity });
-    this.ON_CHANGE(baseEntity);
-  };
-  ///end:slot:js<<<
+  ///start:slot:js<<<///end:slot:js<<<
 
   render() {
     const { dialog } = this.props;
@@ -109,10 +101,9 @@ class CatalogForm extends FormContainer {
           {this.props.parentType && (
             <Select
               flat
-              label='Parent'
               options={this.state.parents}
-              value={this.state.baseEntity.ParentValue}
-              onChange={event => this.handleAutocompleteChange(event, 'ParentId')}
+              value={this.state.baseEntity.Parent}
+              onChange={event => this.handleAutocompleteChange(event, 'Parent')}
               style={{ marginTop: 20 }}
             />
           )}

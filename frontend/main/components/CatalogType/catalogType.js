@@ -9,7 +9,7 @@ import CatalogTypeService from './catalogtype.service';
 ///start:slot:dependencies<<<
 import AdditionalFields from '../AdditionalField/additionalFields';
 import Select from '../../widgets/Select';
-import { widthSnackbar } from 'notistack';
+import { withSnackbar } from 'notistack';
 ///end:slot:dependencies<<<
 
 const service = new CatalogTypeService();
@@ -90,6 +90,7 @@ class CatalogTypeForm extends FormContainer {
           <Select
             flat
             label='Parent Type'
+            labelProp='Name'
             value={this.state.baseEntity.ParentType}
             onChange={event => this.handleAutocompleteChange(event, 'ParentType')}
             options={this.state.parents}
@@ -105,4 +106,4 @@ class CatalogTypeForm extends FormContainer {
   }
 }
 
-export default widthSnackbar(withRouter(CatalogTypeForm));
+export default withSnackbar(withRouter(CatalogTypeForm));

@@ -64,7 +64,6 @@ namespace MyApp.Logic
                 {
                     Db.Update<Catalog>(new { CatalogType = entity.Name }, e => e.CatalogType == original.Name);
                     Db.Update<CatalogType>(new { ParentType = entity.Name }, e => e.ParentType == original.Name);
-                    Db.Update<Catalog>(new { Parent = entity.Name }, e => e.Parent == original.Name);
                 }
             }
 
@@ -83,7 +82,7 @@ namespace MyApp.Logic
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
-        protected override IEnumerable<CatalogType> AdapterOut(params CatalogType[] entities)
+        protected override List<CatalogType> AdapterOut(params CatalogType[] entities)
         {
             ///start:slot:adapterOut<<<///end:slot:adapterOut<<<
 
@@ -92,7 +91,7 @@ namespace MyApp.Logic
                 
             }
 
-            return entities;
+            return entities.ToList();
         }
 
         

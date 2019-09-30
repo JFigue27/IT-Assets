@@ -33,21 +33,20 @@ const Login = props => {
         <Card className='card'>
           <form onSubmit={login}>
             <CardContent>
-              <Typography style={{ margin: '10px 5px' }} variant='h4' align='center' color='inherit'>
-                IT ASSETS
-                <img src='/static/images/Molex_Black.png' alt='Logo Molex' style={{ width: 70, marginTop: 15 }} />
+              <Typography style={{ margin: '40px 5px' }} variant='h4' align='center' color='inherit'>
+                Main
               </Typography>
-              <div className='finger'>
-                <Fingerprint style={{ fontSize: 60 }} />
-              </div>
+              {/* <div className="finger">
+                <Fingerprint style={{ fontSize: 80 }} />
+              </div> */}
               <div className='text-field'>
-                <TextField required fullWidth label='User Name' margin='normal' onChange={event => setUsername(event.target.value)} />
+                <TextField required fullWidth label='Usuario' margin='normal' onChange={event => setUsername(event.target.value)} />
               </div>
               <div className='text-field'>
                 <TextField
                   required
                   fullWidth
-                  label='Password'
+                  label='Contraseña'
                   type='password'
                   autoComplete='current-password'
                   margin='normal'
@@ -58,7 +57,7 @@ const Login = props => {
               <div className='botton'>
                 <Fab variant='extended' aria-label='Delete' type='submit'>
                   <Lock />
-                  Log in
+                  Inicio de Sesion
                 </Fab>
               </div>
             </CardContent>
@@ -71,7 +70,7 @@ const Login = props => {
           justify-content: center;
         }
         .login {
-          padding-top: 10%;
+          padding-top: 30%;
           width: 350px;
         }
         .botton {

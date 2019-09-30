@@ -1,3 +1,5 @@
+@import './static/styles/bootstrap.css';
+
 @import './node_modules/@syncfusion/ej2-base/styles/material.css';
 @import './node_modules/@syncfusion/ej2-icons/styles/material.css';
 @import './node_modules/@syncfusion/ej2-buttons/styles/material.css';
@@ -19,7 +21,7 @@
 body {
   font-family: 'Roboto';
   padding-top: 60px;
-  padding-bottom: 120px;
+  // padding-bottom: 60px;
 }
 
 .filled {
@@ -78,12 +80,12 @@ input[type='number']::-webkit-outer-spin-button {
   padding: 15px;
 }
 
-.MuiPaper-root {
-  z-index: 120 !important;
-}
+// .MuiPaper-root {
+//   z-index: 120 !important;
+// }
 
 .MainAppBar {
-  z-index: 200 !important;
+  // z-index: 1500 !important;
 }
 
 .CellEditable {
@@ -140,4 +142,21 @@ input[type='number']::-webkit-outer-spin-button {
       }
     }
   }
+}
+
+.Attachments {
+  padding: 3px;
+  border: solid #f6f6f6 2px;
+  border-style: dotted;
+  .AttachmentsRow {
+    padding-left: 3px;
+    border-bottom: 1px solid lightgray;
+  }
+  .AttachmentsRow:hover {
+    background: lightgray;
+  }
+}
+
+.BottomSheetButton {
+  padding: 5px !important;
 }

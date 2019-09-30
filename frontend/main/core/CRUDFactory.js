@@ -35,7 +35,7 @@ const GeneralError = response => {
   throw response;
 };
 
-const Request = async (method, url, data, BaseURL) => {
+const Request = async (method, endpoint, data, BaseURL) => {
   if (AuthService.auth == null) AuthService.fillAuthData();
   if (!AuthService.auth || !AuthService.auth.user) throw 'User not signed in.';
 
@@ -49,7 +49,7 @@ const Request = async (method, url, data, BaseURL) => {
     }
   };
   if (['POST', 'PUT', 'DELETE'].includes(method)) config.body = JSON.stringify(data);
-  let response = await fetch((BaseURL || AppConfig.BaseURL) + url, config);
+  let response = await fetch((BaseURL || AppConfig.BaseURL) + endpoint, config);
   if (response) {
     if (!response.ok) throw await response.json();
     if (response.status == 403) alert('Invalid Role.');
@@ -60,10 +60,10 @@ const Request = async (method, url, data, BaseURL) => {
   return await response.json();
 };
 
-const Get = async (url, data, baseURL) => await Request('GET', url, data, baseURL).catch(GeneralError);
-const Post = async (url, data, baseURL) => await Request('POST', url, data, baseURL).catch(GeneralError);
-const Put = async (url, data, baseURL) => await Request('PUT', url, data, baseURL).catch(GeneralError);
-const Delete = async (url, data, baseURL) => await Request('DELETE', url, data, baseURL).catch(GeneralError);
+const Get = async (endpoint, data, baseURL) => await Request('GET', endpoint, data, baseURL).catch(GeneralError);
+const Post = async (endpoint, data, baseURL) => await Request('POST', endpoint, data, baseURL).catch(GeneralError);
+const Put = async (endpoint, data, baseURL) => await Request('PUT', endpoint, data, baseURL).catch(GeneralError);
+const Delete = async (endpoint, data, baseURL) => await Request('DELETE', endpoint, data, baseURL).catch(GeneralError);
 
 export class CRUDFactory {
   constructor(config) {

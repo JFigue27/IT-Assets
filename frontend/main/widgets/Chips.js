@@ -111,7 +111,7 @@ export default class Chips extends React.Component {
               placement={placement || 'top'}
               label={''}
               value={this.state.selectValue || ''}
-              style={{ width: '100%', maxWidth: 200, display: 'inline-block' }}
+              style={{ width: 200, maxWidth: 200, display: 'inline-block' }}
               keyProp={keyProp}
               labelProp={labelProp}
             />

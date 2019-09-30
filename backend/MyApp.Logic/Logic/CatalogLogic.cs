@@ -58,13 +58,23 @@ namespace MyApp.Logic
         {
             if (string.IsNullOrWhiteSpace(entity.CatalogType))
                 throw new KnownError("Error. Catalog Type is a required field.");
+            if (mode == OPERATION_MODE.UPDATE)
+            {
+                var original = GetById(entity.Id);
+                if (original == null) throw new KnownError("Error. Entity no longer exists.");
+
+                if (original.Value != entity.Value)
+                {
+                    Db.Update<Catalog>(new { Parent = entity.Value }, e => e.Parent == original.Value);
+                }
+            }
 
             ///start:slot:beforeSave<<<///end:slot:beforeSave<<<
         }
 
         protected override void OnAfterSaving(Catalog entity, OPERATION_MODE mode = OPERATION_MODE.NONE)
         {
-            
+            Cache.FlushAll();
             ///start:slot:afterSave<<<///end:slot:afterSave<<<
         }
 
@@ -74,7 +84,7 @@ namespace MyApp.Logic
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
-        protected override IEnumerable<Catalog> AdapterOut(params Catalog[] entities)
+        protected override List<Catalog> AdapterOut(params Catalog[] entities)
         {
             ///start:slot:adapterOut<<<///end:slot:adapterOut<<<
 
@@ -83,10 +93,15 @@ namespace MyApp.Logic
                 
             }
 
-            return entities;
+            return entities.ToList();
         }
 
-        
+        public List<string> GetOnlyValues(string catalogType)
+        {
+            var allEntries = GetAll().Where(e => e.CatalogType == catalogType);
+            return allEntries.Select(e => e.Value).ToList();
+        }
+
         ///start:slot:logic<<<///end:slot:logic<<<
     }
 }

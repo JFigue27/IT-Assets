@@ -70,7 +70,7 @@ namespace MyApp.Logic
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
-        protected override IEnumerable<Email> AdapterOut(params Email[] entities)
+        protected override List<Email> AdapterOut(params Email[] entities)
         {
             ///start:slot:adapterOut<<<///end:slot:adapterOut<<<
 
@@ -79,7 +79,7 @@ namespace MyApp.Logic
                 
             }
 
-            return entities;
+            return entities.ToList();
         }
 
         protected override void OnFinalize(Email entity)

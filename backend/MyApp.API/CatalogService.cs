@@ -97,6 +97,16 @@ namespace MyApp.API
                 request.FilterGeneral));
         }
 
+        [Route("/Catalog/OnlyValues/{Type}", "GET")]
+        public class GetOnlyValues
+        {
+            public string Type { get; set; }
+        }
+        public object Get(GetOnlyValues request)
+        {
+            return WithDb(db => Logic.GetOnlyValues(request.Type));
+        }
+
         ///start:slot:endpoints<<<///end:slot:endpoints<<<
         #endregion
     }
