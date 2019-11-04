@@ -81,6 +81,15 @@ namespace MyApp.API
                 return new CommonResponse();
             });
         }
+        public object Delete(DeleteByIdAsset request)
+        {
+            var entity = request.ConvertTo<Asset>();
+            return InTransaction(db =>
+            {
+                Logic.RemoveById(entity.Id);
+                return new CommonResponse();
+            });
+        }
         #endregion
 
         #region Endpoints - Specific
@@ -120,7 +129,9 @@ namespace MyApp.API
     public class UpdateAsset : Asset { }
 
     [Route("/Asset", "DELETE")]
-    [Route("/Asset/{Id}", "DELETE")]
     public class DeleteAsset : Asset { }
+
+    [Route("/Asset/{Id}", "DELETE")]
+    public class DeleteByIdAsset : Asset { }
     #endregion
 }
