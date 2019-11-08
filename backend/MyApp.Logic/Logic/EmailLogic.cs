@@ -38,7 +38,7 @@ namespace MyApp.Logic
 
         protected override Email OnCreateInstance(Email entity)
         {
-            
+
             ///start:slot:createInstance<<<///end:slot:createInstance<<<
 
             return entity;
@@ -46,7 +46,7 @@ namespace MyApp.Logic
 
         protected override SqlExpression<Email> OnGetList(SqlExpression<Email> query)
         {
-            
+
             ///start:slot:listQuery<<<///end:slot:listQuery<<<
 
             return base.OnGetList(query);
@@ -54,7 +54,7 @@ namespace MyApp.Logic
 
         protected override SqlExpression<Email> OnGetSingle(SqlExpression<Email> query)
         {
-            
+
             ///start:slot:singleQuery<<<///end:slot:singleQuery<<<
 
             return base.OnGetSingle(query);
@@ -84,7 +84,7 @@ namespace MyApp.Logic
 
             var emailService = new MailgunService
             {
-                From =  Auth.Email,
+                From = Auth.Email,
                 Subject = entity.Subject,
                 Body = entity.Body,
                 AttachmentsFolder = entity.AttachmentsFolder
@@ -132,7 +132,7 @@ namespace MyApp.Logic
                 ForeignKey = entity.Id,
                 ForeignCommonKey = entity.ForeignCommonKey,
                 ForeignType = "Email",
-                ForeignURL = $"https://ncn.capsonic.com/ncn?id={entity.ForeignCommonKey}"
+                ForeignURL = $"https://ncn.molex.com/ncn?id={entity.ForeignCommonKey}"
             });
 
             ///start:slot:afterSave<<<///end:slot:afterSave<<<
@@ -140,7 +140,7 @@ namespace MyApp.Logic
 
         protected override void OnBeforeRemoving(Email entity)
         {
-            
+
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
@@ -167,7 +167,7 @@ namespace MyApp.Logic
             ///start:slot:unfinalize<<<///end:slot:unfinalize<<<
         }
 
-        
+
         ///start:slot:logic<<<///end:slot:logic<<<
     }
 }
