@@ -46,7 +46,7 @@ namespace MyApp.Logic
 
         protected override SqlExpression<Approval> OnGetList(SqlExpression<Approval> query)
         {
-            
+
             ///start:slot:listQuery<<<///end:slot:listQuery<<<
 
             return base.OnGetList(query);
@@ -54,7 +54,7 @@ namespace MyApp.Logic
 
         protected override SqlExpression<Approval> OnGetSingle(SqlExpression<Approval> query)
         {
-            
+
             ///start:slot:singleQuery<<<///end:slot:singleQuery<<<
 
             return base.OnGetSingle(query);
@@ -73,13 +73,13 @@ namespace MyApp.Logic
 
         protected override void OnAfterSaving(Approval entity, OPERATION_MODE mode = OPERATION_MODE.NONE)
         {
-            
+
             ///start:slot:afterSave<<<///end:slot:afterSave<<<
         }
 
         protected override void OnBeforeRemoving(Approval entity)
         {
-            
+
             ///start:slot:beforeRemove<<<///end:slot:beforeRemove<<<
         }
 
@@ -123,7 +123,7 @@ namespace MyApp.Logic
             EmailService.Subject = "Request for Approval.";
 
             EmailService.Template = "approval.request";
-            EmailService.TemplateParameters.Add("hyperlink", $"https://approvals.capsonic.com/approval?id={approval.Id}");
+            EmailService.TemplateParameters.Add("hyperlink", $"https://localhost/approval?id={approval.Id}");
 
             foreach (var approver in approval.ApproversList)
                 EmailService.To.Add(approver.Email);
