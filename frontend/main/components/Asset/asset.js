@@ -48,8 +48,9 @@ class AssetForm extends FormContainer {
     ///start:slot:afterSave<<<///end:slot:afterSave<<<
   };
 
-  BEFORE_CHECKIN = async () => {
+  BEFORE_CHECKIN = async entity => {
     ///start:slot:beforeCheckin<<<///end:slot:beforeCheckin<<<
+    return entity;
   };
 
   ///start:slot:js<<<///end:slot:js<<<
@@ -64,7 +65,7 @@ class AssetForm extends FormContainer {
 
     return (
       <NoSsr>
-        <Grid className='' container direction='column' item xs={12}>
+        <Grid container direction='column' item xs={12}>
           <TextField
             type='text'
             label='CPU-Name'

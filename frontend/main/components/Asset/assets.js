@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'next/router';
 import { withSnackbar } from 'notistack';
-import { NoSsr, Typography, Grid, Container } from '@material-ui/core';
+import { NoSsr, Typography, Grid } from '@material-ui/core';
 import SearchBox from '../../widgets/Searchbox';
 import Pagination from 'react-js-pagination';
 import ListContainer from '../../core/ListContainer';
@@ -37,7 +37,9 @@ class AssetsList extends ListContainer {
   }
 
   componentDidMount() {
-    ///start:slot:load<<<///end:slot:load<<<
+    ///start:slot:load<<<
+    this.load();
+    ///end:slot:load<<<
   }
 
   AFTER_LOAD = baseList => {
@@ -46,7 +48,7 @@ class AssetsList extends ListContainer {
 
   AFTER_CREATE = instance => {
     ///start:slot:afterCreate<<<
-    this.openDialog(instance);
+    this.openDialog('asset', instance);
     ///end:slot:afterCreate<<<
   };
 
@@ -54,141 +56,122 @@ class AssetsList extends ListContainer {
     ///start:slot:afterCreateCheckout<<<///end:slot:afterCreateCheckout<<<
   };
 
-  AFTER_REMOVE = () => {
+  AFTER_REMOVE(entity) {
     ///start:slot:afterRemove<<<///end:slot:afterRemove<<<
-  };
+    super.AFTER_REMOVE(entity);
+  }
 
   ON_OPEN_ITEM = item => {
     ///start:slot:onOpenItem<<<
-    this.openDialog(item);
+    this.openDialog('asset', item);
     ///end:slot:onOpenItem<<<
   };
 
-  openDialog = item => {
-    this.setState({
-      asset: item
-    });
-  };
-
-  closeDialog = feedback => {
-    if (feedback == 'ok') {
-      this.refresh();
-    }
-    this.setState({
-      asset: false
-    });
-  };
   ///start:slot:js<<<///end:slot:js<<<
 
   render() {
-    const { isLoading, baseEntity, baseList, filterOptions } = this.state;
+    const { isLoading, baseEntity, baseList, filterOptions, isDisabled } = this.state;
 
     ///start:slot:render<<<///end:slot:render<<<
 
     return (
       <NoSsr>
-        <Container maxWidth='lg'>
-          <Grid className='container-fluid' container direction='column' item xs={12} style={{ padding: 5 }} />
-          <Typography variant='h5' className='h5' gutterBottom>
-            IT Assets
-          </Typography>
-          <Grid container direction='row'>
-            <Grid item xs />
-            <Pagination
-              activePage={filterOptions.page}
-              itemsCountPerPage={filterOptions.limit}
-              totalItemsCount={filterOptions.itemsCount}
-              pageRangeDisplayed={5}
-              onChange={newPage => {
-                this.pageChanged(newPage);
-              }}
-            />
-          </Grid>
-          {!isLoading && (
-            <Paper style={{ width: '100%', overflowX: 'auto' }}>
-              <Table className='' size='small'>
-                <TableHead>
-                  <TableRow>
-                    <TableCell />
-                    <TableCell>CPU-Name</TableCell>
-                    <TableCell>Model</TableCell>
-                    <TableCell>Serial Number</TableCell>
-                    <TableCell>Ram</TableCell>
-                    <TableCell>CPU</TableCell>
-                    <TableCell>Location</TableCell>
-                    <TableCell>Usuario</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {baseList &&
-                    baseList.map(item => (
-                      <TableRow key={item.Id}>
-                        <TableCell>
-                          <Grid container direction='row' className='row' justify='center' alignItems='flex-end'>
-                            <Grid item xs={12} sm>
-                              <Button
-                                variant='contained'
-                                color='default'
-                                className=''
-                                onClick={event => {
-                                  this.openItem(event, item);
-                                }}
-                                size='small'
-                              >
-                                <Icon>edit</Icon>Open
-                              </Button>
-                            </Grid>
-                          </Grid>
-                        </TableCell>
-                        <TableCell>
-                          <Typography>{item.CPUName}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography>{item.Model}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography>{item.SerialNumber}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography>{item.Ram}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography>{item.CPU}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography>{item.Location}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography>{item.Usuario}</Typography>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </Paper>
-          )}
-          <Dialog open={!!this.state.asset} onClose={this.closeDialog} draggable title='IT Asset' okLabel='Save'>
-            {dialog => {
-              return !isLoading && <Asset dialog={dialog} data={this.state.asset} />;
+        <Grid className='container-fluid' container direction='column' item xs={12} style={{ padding: 20 }} />
+        <Typography variant='h5' className='h5' gutterBottom>
+          Assets
+        </Typography>
+        <Grid container direction='row'>
+          <Grid item xs />
+          <Pagination
+            activePage={filterOptions.page}
+            itemsCountPerPage={filterOptions.limit}
+            totalItemsCount={filterOptions.itemsCount}
+            pageRangeDisplayed={5}
+            onChange={newPage => {
+              this.pageChanged(newPage);
             }}
-          </Dialog>
-          <AppBar position='fixed' style={{ top: 'auto', bottom: 0, background: '#333333' }}>
-            <Toolbar variant='dense'>
-              <SearchBox bindFilterInput={this.bindFilterInput} value={filterOptions.filterGeneral} />
-              <Grid item xs={12} sm />
-              <Button
-                variant='contained'
-                color='default'
-                className=''
-                onClick={event => {
-                  this.createInstance(event, {});
-                }}
-              >
-                <Icon>add_circle</Icon>New
-              </Button>
-            </Toolbar>
-          </AppBar>
-        </Container>
+          />
+        </Grid>
+        <Paper style={{ width: '100%', overflowX: 'auto' }}>
+          <Table size='small'>
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>CPU-Name</TableCell>
+                <TableCell>Model</TableCell>
+                <TableCell>Serial Number</TableCell>
+                <TableCell>Ram</TableCell>
+                <TableCell>CPU</TableCell>
+                <TableCell>Location</TableCell>
+                <TableCell>Usuario</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {baseList &&
+                baseList.map((item, index) => (
+                  <TableRow key={item.Id}>
+                    <TableCell>
+                      <Grid container direction='row' className='row' justify='center' alignItems='flex-end' spacing={2}>
+                        <Grid item xs={12} sm>
+                          <Button
+                            variant='contained'
+                            color='default'
+                            onClick={event => {
+                              this.openItem(event, item);
+                            }}
+                            size='small'
+                          >
+                            <Icon>edit</Icon>Open
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{item.CPUName}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{item.Model}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{item.SerialNumber}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{item.Ram}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{item.CPU}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{item.Location}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{item.Usuario}</Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </Paper>
+        <Dialog opener={this} id='asset' title='Asset' okLabel='Save'>
+          {dialog => {
+            return !isLoading && <Asset dialog={dialog} data={this.state.asset} />;
+          }}
+        </Dialog>
+        <AppBar position='fixed' style={{ top: 'auto', bottom: 0, background: '#333333' }}>
+          <Toolbar variant='dense'>
+            <SearchBox bindFilterInput={this.bindFilterInput} value={filterOptions.filterGeneral} />
+            <Grid item xs={12} sm />
+            <Button
+              variant='contained'
+              color='default'
+              onClick={event => {
+                this.createInstance({});
+              }}
+            >
+              <Icon>add_circle</Icon>New
+            </Button>
+          </Toolbar>
+        </AppBar>
       </NoSsr>
     );
   }

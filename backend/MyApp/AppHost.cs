@@ -72,8 +72,8 @@ namespace MyApp
                     declaration.Info.Title = "IT Assets";
                     //declaration.Info.Contact = new ServiceStack.Api.OpenApi.Specification.OpenApiContact()
                     //{
-                    //    Email = "apacheco@capsonic.com",
-                    //    Name = "Alfredo Pacheco"
+                    //    Email = "josejaime.figueroa@molex.com",
+                    //    Name = "Jaime Figueroa"
                     //};
                     declaration.Info.Description = "";
                 },
