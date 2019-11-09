@@ -111,7 +111,7 @@ class AssetsList extends ListContainer {
                 baseList.map((item, index) => (
                   <TableRow key={item.Id}>
                     <TableCell>
-                      <Grid container direction='row' className='row' justify='center' alignItems='flex-end' spacing={2}>
+                      <Grid container direction='row' className='row' justify='center' alignItems='flex-end'>
                         <Grid item xs={12} sm>
                           <Button
                             variant='contained'

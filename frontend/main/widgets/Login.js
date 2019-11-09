@@ -35,6 +35,7 @@ const Login = props => {
             <CardContent>
               <Typography style={{ margin: '40px 5px' }} variant='h4' align='center' color='inherit'>
                 IT Assets
+                <img src='/static/images/Molex_Red.png' alt='Logo Molex' style={{ width: 150, paddingTop: 15 }} />
               </Typography>
               {/* <div className="finger">
                 <Fingerprint style={{ fontSize: 80 }} />

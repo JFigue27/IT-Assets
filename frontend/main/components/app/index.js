@@ -142,7 +142,9 @@ class App extends React.Component {
               <Icon>menu</Icon>
             </IconButton> */}
               <Typography variant='h6' color='inherit'>
-                <img src='/static/images/Molex_White.png' alt='molex-logo' style={{ width: 100 }} />
+                <Link href='/'>
+                  <img src='/static/images/Molex_White.png' alt='molex-logo' style={{ width: 100 }} />
+                </Link>
               </Typography>
               <Grid item xs />
               <Tabs variant='standard' value={this.state.currentTab} onChange={this.handleTabsChange}>
@@ -182,7 +184,7 @@ class App extends React.Component {
         <SnackbarProvider autoHideDuration={1500}>
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <GlobalContext.Provider value={this.state.globals}>
-              <Grid container direction='column' item xs={12} style={{ padding: 10 }}>
+              <Grid container direction='column' alignContent='center' item xs={12} style={{ padding: 10 }}>
                 {this.props.children}
               </Grid>
             </GlobalContext.Provider>
